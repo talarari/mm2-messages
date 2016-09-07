@@ -17,17 +17,23 @@ module.exports = NodeHelper.create({
     start: function(){
         var self =this;
         self.sendSocketNotification('PONG',{});
-
-        firebase.database().ref('/users/asaf/messages').once('value').then(function(messagesSnapshot){
+    },
+    getMessages:function(userSlackName){
+        if (!userSlackName) return;
+        const self = this;
+        firebase.database().ref(`/users/${userSlackName}/messages`).once('value').then(function(messagesSnapshot){
             if (!messagesSnapshot.exists()) return;
             const messagesByKey =messagesSnapshot.val();
             console.log(JSON.stringify(messagesByKey));
             const messages = Object.keys(messagesByKey).map(x=> messagesByKey[x]);
             self.sendSocketNotification('MESSAGES',messages);
         })
-
+    },
+    // Subclass socketNotificationReceived received.
+    socketNotificationReceived: function(notification, payload) {
+        console.log('got notification ' + notification);
+        if (notification === "LOGIN"){
+            this.getMessages(payload.slackName);
+        }
     }
-    //// Subclass socketNotificationReceived received.
-    //socketNotificationReceived: function(notification, payload) {
-    //}
 });

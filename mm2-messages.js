@@ -26,12 +26,18 @@ Module.register("mm2-messages",{
         return wrapper;
     },
     socketNotificationReceived: function(notification, payload) {
-        console.log(notification)
+        console.log('here with '+ notification )
         if (notification === "MESSAGES"){
             console.log(payload);
             this.messages = payload;
             this.updateDom(0);
         }
 
+    },
+    notificationReceived:function(notification,payload){
+        if (notification === "LOGIN"){
+            this.sendSocketNotification("LOGIN",payload);
+        }
     }
+
 });
