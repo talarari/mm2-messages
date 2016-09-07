@@ -6,14 +6,14 @@ Module.register("mm2-messages",{
     start: function(){
         var self = this;
         self.sendSocketNotification('PING',{});
-        self.sendSocketNotification('LOGIN',{slackName:'amirp'});
-        setTimeout(()=>{
-            self.sendSocketNotification('LOGOUT');
-        },15000);
+        // self.sendSocketNotification('LOGIN',{slackName:'amirp'});
+        // setTimeout(()=>{
+        //     self.sendSocketNotification('LOGOUT');
+        // },15000);
 
-        setTimeout(()=>{
-            self.sendSocketNotification('LOGIN',{slackName:'tal'});
-        },20000);
+        // setTimeout(()=>{
+        //     self.sendSocketNotification('LOGIN',{slackName:'tal'});
+        // },20000);
 
 
     },
