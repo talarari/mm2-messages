@@ -34,7 +34,7 @@ Module.register("mm2-messages",{
         if (!self.refreshIntervalId){
             self.refreshIntervalId = setInterval(()=>{
                 self.updateDom(0)
-            },5000);
+            },20000);
         }
 
 
