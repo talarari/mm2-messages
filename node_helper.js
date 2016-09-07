@@ -19,14 +19,22 @@ module.exports = NodeHelper.create({
         self.sendSocketNotification('PONG',{});
     },
     getMessages:function(userSlackName){
-        if (!userSlackName) return;
         const self = this;
-        firebase.database().ref(`/users/${userSlackName}/messages`).once('value').then(function(messagesSnapshot){
+        if (!userSlackName){
+            self.sendSocketNotification('MESSAGES',null);
+            return;
+        }
+
+        const userMessagesRef = firebase.database().ref(`/users/${userSlackName}/messages`);
+        userMessagesRef.once('value').then(function(messagesSnapshot){
             if (!messagesSnapshot.exists()) return;
-            const messagesByKey =messagesSnapshot.val();
-            console.log(JSON.stringify(messagesByKey));
-            const messages = Object.keys(messagesByKey).map(x=> messagesByKey[x]);
-            self.sendSocketNotification('MESSAGES',messages);
+
+            userMessagesRef.remove().then(()=>{
+                const messagesByKey =messagesSnapshot.val();
+                const messages = Object.keys(messagesByKey).map(x=> messagesByKey[x]);
+                self.sendSocketNotification('MESSAGES',messages);
+            });
+
         })
     },
     // Subclass socketNotificationReceived received.
@@ -34,6 +42,9 @@ module.exports = NodeHelper.create({
         console.log('got notification ' + notification);
         if (notification === "LOGIN"){
             this.getMessages(payload.slackName);
+        }
+        if (notification === "LOGOUT"){
+            this.getMessages(null);
         }
     }
 });
