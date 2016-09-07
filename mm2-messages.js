@@ -19,7 +19,7 @@ Module.register("mm2-messages",{
         var displayTime = moment(message.send).fromNow();
         wrapper.innerHTML =
             `<div >
-                <span class="medium bright">${message.from}:${message.text}</span></br>
+                <span class="medium bright">${message.from} says :${message.text}</span></br>
                 <span class="light small dimmed">${displayTime}</span>
             </div>`;
 

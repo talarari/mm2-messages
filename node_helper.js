@@ -19,13 +19,11 @@ module.exports = NodeHelper.create({
         self.sendSocketNotification('PONG',{});
 
         firebase.database().ref('/users/asaf/messages').once('value').then(function(messagesSnapshot){
-            console.log('here');
             if (!messagesSnapshot.exists()) return;
-            console.log('here 2');
             const messagesByKey =messagesSnapshot.val();
-            console.log(messagesByKey);
-            const messages = Object.keys(messages).map(x=> messagesByKey[x]);
-            self.sendSocketNotification('MESSAGES',messagesByKey);
+            console.log(JSON.stringify(messagesByKey));
+            const messages = Object.keys(messagesByKey).map(x=> messagesByKey[x]);
+            self.sendSocketNotification('MESSAGES',messages);
         })
 
     }
